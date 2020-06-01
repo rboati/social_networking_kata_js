@@ -1,0 +1,4 @@
+#!/bin/bash
+# nutshell (see https://github.com/rboati/nutshell)
+
+export PATH="$PWD/node_modules/.bin:$PATH"
