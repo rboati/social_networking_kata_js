@@ -3,12 +3,15 @@
 	"version": "1.0.0",
 	"description": "This implementation is written in javascript for fun and experimentation.",
 	"main": "src/main.js",
+	"esm": {
+		"cjs": true
+	},
 	"scripts": {
-		"main": "node .",
+		"main": "node --require esm .",
 		"clean": "shx rm -rf node_modules/.cache",
 		"premaintainer-clean": "npm run clean",
 		"maintainer-clean": "shx rm -rf node_modules .vscode",
-		"test": "mocha"
+		"test": "mocha --require esm"
 	},
 	"author": "Roberto Boati",
 	"license": "MIT",
@@ -17,5 +20,8 @@
 		"mocha": "^7.2.0",
 		"shx": "^0.3.2"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"better-sqlite3": "^7.0.1",
+		"esm": "^3.2.25"
+	}
 }

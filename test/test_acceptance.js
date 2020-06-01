@@ -1,7 +1,29 @@
-const chai = require('chai');
+import chai from 'chai';
 const assert = chai.assert;
 
+import { UserDb } from '../src/data/user_db.js';
+import { Repl } from '../src/ui/repl.js';
+import { DefaultConsole } from '../src/ui/default_console.js';
+
+
+
 describe('Acceptance test', function() {
+	let con = null;
+	let userDb = null;
+	let repl = null;
+
+	beforeEach(function() {
+		con = new DefaultConsole();
+		userDb = new UserDb();
+		//repl = new Repl(con);
+	});
+
+	afterEach(function() {
+		userDb.fini();
+		con = null;
+		userDb = null;
+		repl = null;
+	});
 
 	const script = [
 		{
