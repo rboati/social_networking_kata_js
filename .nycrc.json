@@ -1,0 +1,21 @@
+{
+	"extension": [ ".js" ],
+	"all": true,
+	"require": [
+		"esm"
+	],
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"coverage",
+		"test",
+		"src/**/*_interface.js"
+	],
+	"reporter": [
+		"text",
+		"text-summary",
+		"html",
+		"lcov"
+	]
+}

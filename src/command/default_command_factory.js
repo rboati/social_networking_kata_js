@@ -8,7 +8,9 @@ import { UserDb } from '../data/user_db.js';
 
 import { UnknownCommand } from './unknown_command.js';
 import { PostCommand } from './post_command.js';
+import { FollowCommand } from './follow_command.js';
 import { ReadCommand } from './read_command.js';
+import { WallCommand } from './wall_command.js';
 
 export class DefaultCommandFactory extends ICommandFactory{
 	constructor(userDb, clock, con) {
@@ -23,7 +25,9 @@ export class DefaultCommandFactory extends ICommandFactory{
 		this.commands = {}
 		this.unknownCommand = new UnknownCommand();
 		this.addCommand('->', new PostCommand(userDb, clock));
+		this.addCommand('follows', new FollowCommand(userDb));
 		this.addCommand('', new ReadCommand(userDb, clock, con));
+		this.addCommand('wall', new WallCommand(userDb, clock, con));
 	}
 
 	addCommand(token, command) {

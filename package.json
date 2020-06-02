@@ -8,16 +8,18 @@
 	},
 	"scripts": {
 		"main": "node --require esm .",
-		"clean": "shx rm -rf node_modules/.cache",
+		"clean": "shx rm -rf .nyc_output coverage node_modules/.cache",
 		"premaintainer-clean": "npm run clean",
 		"maintainer-clean": "shx rm -rf node_modules .vscode",
-		"test": "mocha --require esm"
+		"test": "mocha --require esm",
+		"coverage": "nyc npm test"
 	},
 	"author": "Roberto Boati",
 	"license": "MIT",
 	"devDependencies": {
 		"chai": "^4.2.0",
 		"mocha": "^7.2.0",
+		"nyc": "^15.1.0",
 		"shx": "^0.3.2",
 		"stream-buffers": "^3.0.2"
 	},
