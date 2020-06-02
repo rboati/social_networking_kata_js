@@ -1,27 +1,80 @@
 import chai from 'chai';
 const assert = chai.assert;
 
+import streamBuffers from 'stream-buffers';
+import { EventEmitter, once } from 'events';
+
+import { IConsole } from '../src/ui/console_interface.js';
+import { IClock } from '../src/time/clock_interface.js';
 import { UserDb } from '../src/data/user_db.js';
 import { Repl } from '../src/ui/repl.js';
-import { DefaultConsole } from '../src/ui/default_console.js';
+
+
+class myWritableStreamBuffer extends streamBuffers.WritableStreamBuffer {
+	constructor(opts) {
+		super(opts);
+		this.myEmitter = new EventEmitter();
+	}
+
+	write(chunk, encoding, callback) {
+		super.write(chunk, encoding, callback);
+		const stringChunk = chunk.toString();
+		if (stringChunk === '> ') {
+			this.myEmitter.emit('ready', this.getContentsAsString('utf8'));
+		}
+	}
+}
+
+class TestConsole extends IConsole {
+	constructor() {
+		super();
+		this.input = new streamBuffers.ReadableStreamBuffer({ frequency: 10, chunkSize: 2048 });
+		this.output = new myWritableStreamBuffer({ initialSize: (100 * 1024), incrementAmount: (10 * 1024) });
+	}
+
+	getReadableStream() {
+		return this.input;
+	}
+
+	getWritableStream() {
+		return this.output;
+	}
+}
+
+class TestClock extends IClock {
+	constructor() {
+		super();
+		this.time = new Date().getTime();
+	}
+
+	currentTime() {
+		return this.time;
+	}
+}
+
+
 
 
 
 describe('Acceptance test', function() {
 	let con = null;
 	let userDb = null;
+	let clock = null;
 	let repl = null;
 
 	beforeEach(function() {
-		con = new DefaultConsole();
+		con = new TestConsole();
 		userDb = new UserDb();
-		//repl = new Repl(con);
+		clock = new TestClock();
+		repl = new Repl(con);
 	});
 
 	afterEach(function() {
 		userDb.fini();
 		con = null;
 		userDb = null;
+		clock = null;
+		commandFactory = null;
 		repl = null;
 	});
 
@@ -89,10 +142,16 @@ describe('Acceptance test', function() {
 
 
 	it('should match every event', async function() {
-		let time = Date.now();
+		repl.mainLoop();
 		for (const event of script) {
-			time += (event.delta * 1000);
-			const actualOutput = event.in; // TODO
+			clock.time += (event.delta * 1000);
+			con.input.put(event.in);
+			const [ actualOutput ] = await once(con.output.myEmitter, 'ready');
+			//console.log("-- expected --");
+			//console.log("\x1b[36m%s\x1b[0m", event.out);
+			//console.log("--- actual ---");
+			//console.log("\x1b[1m%s\x1b[0m", event.out);
+			//console.log("--------------");
 			assert.equal(actualOutput, event.out);
 		}
 	});

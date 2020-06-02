@@ -64,6 +64,17 @@ export class UserDb {
 		stmt.run(userName, message, unixTime);
 	}
 
+	follow(follower, followed) {
+		if (!this.exists(followed)) {
+			throw new Error(`User ${followed} doesn't exist`);
+		}
+		this.add(follower);
+
+		let sql = `INSERT INTO following (follower_id, followed_id) VALUES ((SELECT id FROM user WHERE name=?), (SELECT id FROM user WHERE name=?))`
+		let stmt = this.db.prepare(sql);
+		stmt.run(follower, followed);
+	}
+
 	read(userName) {
 		let  sql = `
 			SELECT content, strftime('%s',timestamp) timestamp
@@ -73,5 +84,23 @@ export class UserDb {
 		`;
 		let stmt = this.db.prepare(sql);
 		return stmt.all(userName);
+	}
+
+	wall(userName) {
+		let sql = `
+			SELECT u.name name, p.content content, strftime('%s',timestamp) timestamp
+			FROM post p
+				JOIN user u ON p.author_id = u.id
+			WHERE u.name = ? OR
+				u.id IN (
+					SELECT u2.id id
+					FROM following f
+						JOIN user u1 ON f.follower_id = u1.id
+						JOIN user u2 ON f.followed_id = u2.id
+					WHERE u1.name = ?
+				) ORDER BY p.id DESC
+		`;
+		let stmt = this.db.prepare(sql);
+		return stmt.all(userName, userName);
 	}
 }
