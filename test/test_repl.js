@@ -7,6 +7,7 @@ import { EventEmitter, once } from 'events';
 import { IConsole } from '../src/ui/console_interface.js';
 import { IClock } from '../src/time/clock_interface.js';
 import { UserDb } from '../src/data/user_db.js';
+import { DefaultCommandFactory } from '../src/command/default_command_factory.js';
 import { Repl } from '../src/ui/repl.js';
 
 
@@ -60,7 +61,8 @@ describe('REPL', function() {
 	let con = new TestConsole();
 	let userDb = new UserDb();
 	let clock = new TestClock();
-	let repl = new Repl(con);
+	let commandFactory = new DefaultCommandFactory(userDb, clock, con);
+	let repl = new Repl(con, commandFactory);
 
 
 	const script = [
@@ -129,7 +131,8 @@ describe('REPL', function() {
 		con = new TestConsole();
 		userDb = new UserDb();
 		clock = new TestClock();
-		repl = new Repl(con);
+		commandFactory = new DefaultCommandFactory(userDb, clock, con);
+		repl = new Repl(con, commandFactory);
 	});
 
 	afterEach(function() {
@@ -137,6 +140,7 @@ describe('REPL', function() {
 		userDb = null;
 		con = null;
 		clock = null;
+		commandFactory = null;
 		repl = null;
 	});
 

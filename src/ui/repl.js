@@ -1,18 +1,21 @@
 
 import readline from 'readline';
 import assert from 'assert';
+import { ICommandFactory } from '../command/command_factory_interface.js';
 import { IConsole } from './console_interface.js';
 
 
 export class Repl {
-	constructor(con) {
+	constructor(con, commandFactory) {
 		assert(con instanceof IConsole);
+		assert(commandFactory instanceof ICommandFactory);
 		this.rl = readline.createInterface({
 			input: con.getReadableStream(),
 			output: con.getWritableStream(),
 			prompt: '> ',
 			removeHistoryDuplicates: true,
 		  });
+		this.commandFactory = commandFactory;
 	}
 
 	mainLoop() {
@@ -36,8 +39,8 @@ export class Repl {
 				}
 			}
 
-			console.log(commandToken);
-
+			const command = this.commandFactory.getCommand(commandToken);
+			command.execute(userToken, arg);
 			this.rl.prompt();
 		});
 	}

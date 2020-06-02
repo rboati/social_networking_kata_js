@@ -7,6 +7,7 @@ import { EventEmitter, once } from 'events';
 import { IConsole } from '../src/ui/console_interface.js';
 import { IClock } from '../src/time/clock_interface.js';
 import { UserDb } from '../src/data/user_db.js';
+import { DefaultCommandFactory } from '../src/command/default_command_factory.js';
 import { Repl } from '../src/ui/repl.js';
 
 
@@ -60,13 +61,15 @@ describe('Acceptance test', function() {
 	let con = null;
 	let userDb = null;
 	let clock = null;
+	let commandFactory = null;
 	let repl = null;
 
 	beforeEach(function() {
 		con = new TestConsole();
 		userDb = new UserDb();
 		clock = new TestClock();
-		repl = new Repl(con);
+		commandFactory = new DefaultCommandFactory(userDb, clock, con);
+		repl = new Repl(con, commandFactory);
 	});
 
 	afterEach(function() {
