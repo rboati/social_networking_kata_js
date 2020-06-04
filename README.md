@@ -11,9 +11,11 @@ Futhermore it was an opportunity to use ES6 modules and check the status of comp
 
 ## Prerequisites
 - npm
-- node
+- node (tested with v14.3.0)
 
-The project has been tested only on Linux platform but it should work also on other common platforms (Windows, macOS).
+The project has been tested only on Linux platform.
+
+It should work also on other common platforms (Windows, macOS) but there hasn't been a throughly testing for incompatibilities on different platforms and different node versions.
 
 ## Installation
 After cloning the repository you should execute:
@@ -33,10 +35,12 @@ Execute the following command to run the tests:
 ```
 npm test
 ```
-It's possible to check the coverage reports in the `coverage` directory after executing:
+It's possible to check the test coverage reports in the `coverage` directory after executing:
 ```
 npm coverage
 ```
+Unfortunately there are still some problems with coverage measurements, ES6 modules and caches. This problem hasn't been deeply addressed in current build.
+If you get very low measurements please try running manually `npm run clean` before executing the coverage command.
 
 ## Author
 Roberto Boati - [rboati](https://github.com/rboati)
