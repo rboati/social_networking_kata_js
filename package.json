@@ -7,7 +7,7 @@
 		"cjs": true
 	},
 	"scripts": {
-		"main": "node --require esm .",
+		"start": "node --require esm .",
 		"clean": "shx rm -rf .nyc_output coverage node_modules/.cache",
 		"premaintainer-clean": "npm run clean",
 		"maintainer-clean": "shx rm -rf node_modules .vscode",
