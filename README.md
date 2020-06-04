@@ -1,7 +1,7 @@
 # Social Networking Kata
 This implementation is written in javascript for fun and experimentation.
 
-The original specifications are available at [Social Networking kata](https://github.com/xpeppers/social_networking_kata_kata).
+The original specifications are available at [Social Networking kata](https://github.com/xpeppers/social_networking_kata).
 
 In this kata I "pushed" Javascript and used it as an OO language to explore this possibility.
 So I tried to use a naive form of interfaces.
@@ -37,9 +37,10 @@ npm test
 ```
 It's possible to check the test coverage reports in the `coverage` directory after executing:
 ```
-npm coverage
+npm run coverage
 ```
-Unfortunately there are still some problems with coverage measurements, ES6 modules and caches. This problem hasn't been deeply addressed in current build.
+Unfortunately there are still some problems with coverage measurements, ES6 modules and caches.
+This problem hasn't been deeply addressed in current build.
 If you get very low measurements please try running manually `npm run clean` before executing the coverage command.
 
 ## Author
