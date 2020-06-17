@@ -8,6 +8,6 @@ export class DefaultConsole extends IConsole {
 	}
 
 	getWritableStream() {
-		return process.stdin;
+		return process.stdout;
 	}
 }
